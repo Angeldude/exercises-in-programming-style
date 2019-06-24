@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 import sys, re, operator, string
+from functools import reduce
+
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 
 #
 # Functions for map reduce
 #
 def partition(data_str, nlines):
-    """ 
+    """
     Partitions the input data_str (a big string)
     into chunks of nlines.
     """
@@ -14,8 +21,8 @@ def partition(data_str, nlines):
         yield '\n'.join(lines[i:i+nlines])
 
 def split_words(data_str):
-    """ 
-    Takes a string, returns a list of pairs (word, 1), 
+    """
+    Takes a string, returns a list of pairs (word, 1),
     one for each word in the input, so
     [(w1, 1), (w2, 1), ..., (wn, 1)]
     """
@@ -38,14 +45,14 @@ def split_words(data_str):
 
 def regroup(pairs_list):
     """
-    Takes a list of lists of pairs of the form 
+    Takes a list of lists of pairs of the form
     [[(w1, 1), (w2, 1), ..., (wn, 1)],
      [(w1, 1), (w2, 1), ..., (wn, 1)],
      ...]
-    and returns a dictionary mapping each unique word to the 
+    and returns a dictionary mapping each unique word to the
     corresponding list of pairs, so
-    { w1 : [(w1, 1), (w1, 1)...], 
-      w2 : [(w2, 1), (w2, 1)...], 
+    { w1 : [(w1, 1), (w1, 1)...],
+      w2 : [(w2, 1), (w2, 1)...],
       ...}
     """
     mapping = {}
@@ -56,11 +63,11 @@ def regroup(pairs_list):
             else:
                 mapping[p[0]] = [p]
     return mapping
-    
+
 def count_words(mapping):
-    """ 
+    """
     Takes a mapping of the form (word, [(word, 1), (word, 1)...)])
-    and returns a pair (word, frequency), where frequency is the 
+    and returns a pair (word, frequency), where frequency is the
     sum of all the reported occurrences
     """
     def add(x, y):
@@ -87,5 +94,4 @@ splits_per_word = regroup(splits)
 word_freqs = sort(map(count_words, splits_per_word.items()))
 
 for (w, c) in word_freqs[0:25]:
-    print w, ' - ', c
-
+    print(w, ' - ', c)

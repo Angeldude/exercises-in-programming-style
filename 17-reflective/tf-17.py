@@ -21,7 +21,7 @@ def frequencies_imp(word_list):
 if len(sys.argv) > 1:
     extract_words_func = "lambda name : [x.lower() for x in re.split('[^a-zA-Z]+', open(name).read()) if len(x) > 0 and x.lower() not in stops]"
     frequencies_func = "lambda wl : frequencies_imp(wl)"
-    sort_func = "lambda word_freq: sorted(word_freq.iteritems(), key=operator.itemgetter(1), reverse=True)"
+    sort_func = "lambda word_freq: sorted(word_freq.items(), key=operator.itemgetter(1), reverse=True)"
     filename = sys.argv[1]
 else:
     extract_words_func = "lambda x: []"
@@ -44,5 +44,5 @@ exec('sort = ' + sort_func)
 word_freqs = locals()['sort'](locals()['frequencies'](locals()['extract_words'](filename)))
 
 for (w, c) in word_freqs[0:25]:
-    print w, ' - ', c
+    print(w, ' - ', c)
 

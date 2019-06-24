@@ -8,18 +8,18 @@ import sys, re, itertools, operator
 all_words = [(), None]
 stop_words = [(), None]
 non_stop_words = [(), lambda : \
-                          map(lambda w : \
+                          list(map(lambda w : \
                             w if w not in stop_words[0] else '',\
-                              all_words[0])]
+                              all_words[0]))]
 unique_words = [(),lambda : 
                     set([w for w in non_stop_words[0] if w!=''])]
 counts = [(), lambda : 
-                map(lambda w, word_list : word_list.count(w), \
+                list(map(lambda w, word_list : word_list.count(w), \
                     unique_words[0], \
                     itertools.repeat(non_stop_words[0], \
-                                   len(unique_words[0])))]
+                                   len(unique_words[0]))))]
 sorted_data = [(), lambda : sorted(zip(list(unique_words[0]), \
-                                       counts[0]), \
+                                       list(counts[0])), \
                                    key=operator.itemgetter(1), 
                                    reverse=True)]
 
@@ -38,7 +38,6 @@ def update():
         if c[1] != None:
             c[0] = c[1]() 
 
-
 # Load the fixed data into the first 2 columns
 all_words[0] = re.findall('[a-z]{2,}', open(sys.argv[1]).read().lower())
 stop_words[0] = set(open('../stop_words.txt').read().split(','))
@@ -46,4 +45,4 @@ stop_words[0] = set(open('../stop_words.txt').read().split(','))
 update()
 
 for (w, c) in sorted_data[0][:25]:
-    print w, '-', c
+    print(w, '-', c)
